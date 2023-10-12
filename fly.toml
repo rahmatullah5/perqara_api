@@ -1,0 +1,37 @@
+# fly.toml app configuration file generated for perqara-api on 2023-10-12T23:29:23+07:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "perqara-api"
+primary_region = "sin"
+kill_signal = "SIGTERM"
+kill_timeout = "5s"
+swap_size_mb = 512
+
+[build]
+
+[deploy]
+  release_command = "/app/bin/migrate"
+
+[env]
+  PHX_HOST = "perqara-api.fly.dev"
+  PORT = "8080"
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8080
+  processes = ["app"]
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 1000
+    soft_limit = 1000

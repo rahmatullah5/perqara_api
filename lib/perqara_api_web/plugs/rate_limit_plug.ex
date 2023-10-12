@@ -13,7 +13,7 @@ defmodule PerqaraApiWeb.RateLimitPlug do
     case Hammer.check_rate(
            client_ip_address(conn),
            hammer_config[:bucket_size_in_ms],
-           1000
+           hammer_config[:max_limit_request]
          ) do
       {:allow, _count} ->
         conn
